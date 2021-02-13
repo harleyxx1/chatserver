@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const crypto = require('crypto');
 
 const { Socket } = require('./backend/socket');
 
