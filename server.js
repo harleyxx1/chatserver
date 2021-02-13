@@ -25,8 +25,6 @@ io.on('connection', (socket) => {
         time: `${hour > 12 ? hour - 12 : hour}:${minutes < 10 ? '0'+minutes : minutes} ${hour > 11 ? 'PM' : AM}`
     }
 
-    socket = socket;
-
     socket.on('userJoined', (name) => {
         socket.nickname = name;
 
