@@ -19,11 +19,19 @@ io.on('connection', (socket) => {
 
         const otherParticipantResponse = {
             name: 'Server',
+            timestamp: {
+                date: `13-02-2021`,
+                time: `Test hour`
+            },
             message: `${name} has joined.`
         } 
 
         const socketReponse = {
             name: 'Server',
+            timestamp: {
+                date: `13-02-2021`,
+                time: `Test hour`
+            },
             message: `Weclome to the Lets Talk.`
         }
 
@@ -35,6 +43,10 @@ io.on('connection', (socket) => {
     socket.on('messageSent', (message) => {
         var response = {
             name: socket.nickname,
+            timestamp: {
+                date: `13-02-2021`,
+                time: `Test hour`
+            },
             message: message
         } 
         io.emit('messageReceived', response);
