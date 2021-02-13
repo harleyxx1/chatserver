@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-
-const { Socket } = require('./backend/socket');
+const socket = require('socket.io');
 
 //initialize dotenv.
 dotenv.config();
@@ -12,7 +11,51 @@ const app = express();
 //initialize http server;
 const http = require('http').Server(app);
 
-const socket = new Socket(http);
+const io = socket(http);
+
+io.on('connection', (socket) => {
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var newTime = {
+        date: `${day}-${month}-${year}`,
+        time: `${hour > 12 ? hour - 12 : hour}:${minutes < 10 ? '0'+minutes : minutes} ${hour > 11 ? 'PM' : AM}`
+    }
+
+    socket = socket;
+
+    socket.on('userJoined', (name) => {
+        socket.nickname = name;
+
+        var otherParticipantResponse = {
+            name: 'Server',
+            timestamp: newTime,
+            message: `${name} has joined.`
+        } 
+
+        var socketReponse = {
+            name: 'Server',
+            timestamp: newTime,
+            message: `Weclome to the Lets Talk.`
+        }
+
+        socket.emit('userJoined', socketReponse)
+
+        socket.broadcast.emit('userJoined', otherParticipantResponse);
+    })
+
+    socket.on('messageSent', (message) => {
+        var response = {
+            name: socket.nickname,
+            timestamp: newTime,
+            message: message
+        } 
+        io.emit('messageReceived', response);
+    })
+})
 
 app.get('/', (req, res) => {
     res.send('hehehe')
