@@ -24,7 +24,6 @@ io.on('connection', (socket) => {
 
         const socketReponse = {
             name: 'Server',
-            timestamp: newTime,
             message: `Weclome to the Lets Talk.`
         }
 
