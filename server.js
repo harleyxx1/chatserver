@@ -14,27 +14,15 @@ const http = require('http').Server(app);
 const io = socket(http);
 
 io.on('connection', (socket) => {
-    var date = new Date();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    var hour = date.getHours();
-    var minutes = date.getMinutes();
-    var newTime = {
-        date: `${day}-${month}-${year}`,
-        time: `${hour > 12 ? hour - 12 : hour}:${minutes < 10 ? '0'+minutes : minutes} ${hour > 11 ? 'PM' : AM}`
-    }
-
     socket.on('userJoined', (name) => {
         socket.nickname = name;
 
-        var otherParticipantResponse = {
+        const otherParticipantResponse = {
             name: 'Server',
-            timestamp: newTime,
             message: `${name} has joined.`
         } 
 
-        var socketReponse = {
+        const socketReponse = {
             name: 'Server',
             timestamp: newTime,
             message: `Weclome to the Lets Talk.`
@@ -48,7 +36,6 @@ io.on('connection', (socket) => {
     socket.on('messageSent', (message) => {
         var response = {
             name: socket.nickname,
-            timestamp: newTime,
             message: message
         } 
         io.emit('messageReceived', response);
